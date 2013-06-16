@@ -60,6 +60,7 @@ Weather.cityParse = function () {
 			code,
 			item;
 	    
+	    // 解析城市转为hash形式
 		for (prop in this.city) {
 		    item = Weather.city[prop];
 			for (var city in item) {
