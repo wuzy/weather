@@ -5,7 +5,7 @@ Weather.prototype = {
   getWeather: function (city, callback) {
 	    var that = this,
 		    cities = Weather.cityParse(),
-	        code = cities[city] ? cities[city] : 125,	
+	        code = cities[city] ? cities[city] : 125,	// 默认为北京的天气
 	        url = 'http://mat1.qq.com/weather/inc/minisite2_' + code + '.js';
 
 		this.createJsonp(url, function (para) {
