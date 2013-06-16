@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<title>weather</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk;" />
+		<style type="text/css" >
+            #city {
+			    width: 150px;
+				heigth: 30px;
+			}
+			#inputCity {
+			    position: absolute;
+				width: 130px;
+				heigth: 25px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Weather</h1>
+		<fieldset>
+			<legend> 获取时间 </legend>
+			<label for="city">请选择城市:</label>
+			<select name="city" id="city">
+			    <!--<option selected="selected"></option>-->
+			    <option>北京</option>
+				<option>大连</option>
+				<option>福州</option>
+			</select>
+			<input type="text" id="inputCity" value = '请输入或选择城市' />
+			<input type="button" id="getWeather" value="获取天气" />
+	    </fieldset>
+		<div id="showWeather">
+		
+		</div>
+		<script type="text/javascript" src="weather.js"></script>
+		<script>
+		(function(){
+		    
+		    
+			
+			var city = document.getElementById('city');
+			var getWeather = document.getElementById('getWeather');
+			var inputCity = document.getElementById('inputCity');
+			var tip = inputCity.value;
+			var cities = Weather.cityParse();
+			
+			
+			var pos = Util.getBoundingClientRect(city);
+			var volumn = Util.getComputedStyle(city);
+			console.log(pos);
+			
+			// 设置输入文本框的位置
+			inputCity.style.left = pos.left + 'px';
+			inputCity.style.top = pos.top + 'px';
+			
+			Util.addEvent(city, 'change', function (event) {
+			    var value = city.options[city.selectedIndex].value;
+				inputCity.value = value;
+			});
+			
+			Util.addEvent(inputCity, 'focus', function (event) {
+			    Util.getTarget(event).select();
+			});
+			
+			Util.addEvent(inputCity, 'change', function () {
+			    
+				var city = inputCity.value;
+				if ( city.slice(-1) === '市') {
+				    city = city.slice(0, -1);
+				}
+				if ( city && !cities[city] ) {
+				    alert('目前无法获取' + city + '的天气，请输入其它城市');
+				} else if ( !city ) {
+				    inputCity.value = tip;
+				}
+				
+			});
+			
+			Util.addEvent(getWeather, 'click', function (event) {
+			    var city = inputCity.value;
+				if ( city && !cities[city] ) {
+				    alert('目前无法获取' + city + '的天气，请输入其它城市');
+					return false;
+				}
+				
+				(new Weather()).getWeather(city, function(param){
+		         
+					var showWeather = document.getElementById('showWeather');
+                    showWeather.innerHTML = '城市:' + param.city + 
+						'<br /> 温度:' + param.temperature +
+						'<br />  温度范围:' + param.range +
+						'<br />  描述:' + param.describe;   					
+		        });
+			});
+			
+			
+		})();    
+		</script>
+	</body>
+</html>
